@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from "prop-types";
 import css from './Modal.module.css';
 
 export class Modal extends Component {
@@ -33,6 +34,14 @@ export class Modal extends Component {
     )
   }
 }
+
+Modal.propTypes = {
+  image: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+}
+
+
 
 // export const Modal = ({image, tags, onClose}) => {
 //   return (

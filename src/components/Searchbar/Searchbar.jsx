@@ -2,6 +2,7 @@ import { Component } from "react";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import PropTypes from "prop-types";
 import css from "./Searchbar.module.css";
 
 export class Searchbar extends Component {
@@ -52,4 +53,8 @@ export class Searchbar extends Component {
     </header>
     )
   }
+}
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 }
