@@ -6,7 +6,7 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
-import css from "./App.module.css";
+import css from './App.module.css';
 
 axios.defaults.baseURL = 'https://pixabay.com/api/';
 const API_KEY = '34260736-34eeaa34875fe4dc0dfd398f9';
@@ -30,8 +30,8 @@ export class App extends Component {
     if (prevSearchQuery !== newSearchQuery || newPage !== prevPage) {
       this.setState({ isLoading: true, isVisible: false });
       this.getImages();
-    } else if (prevState.isLoading !== this.state.isLoading) {
-      this.setState({ isLoading: false });
+      } else if (prevState.isLoading !== this.state.isLoading) {
+        this.setState({ isLoading: false });
     }
   }
 
@@ -55,7 +55,7 @@ export class App extends Component {
       }));
 
       if (response.data.totalHits === 0) {
-        this.setState({ isVisible: false });
+        this.setState({ isVisible: false, isLoading: false });
         toast.error(
           'Sorry there are no images matching your search query. Please try again.',
           {
@@ -65,8 +65,8 @@ export class App extends Component {
       }
     } catch (err) {
       console.log(err);
-    } finally {
-      this.setState({ isLoading: false });
+      } finally {
+        this.setState({ isLoading: false });
     }
   }
 
@@ -80,11 +80,11 @@ export class App extends Component {
   }
 
   handleFormSubmit = searchQuery => {
-    this.setState({ searchQuery, page: 1, images: [], isVisible: false });
+    this.setState({ searchQuery, page: 1, images: [], isVisible: false, isLoading: true });
   };
 
   onLoadMoreClick = () => {
-    this.setState({ isVisible: true });
+    this.setState({ isLoading: true });
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
@@ -97,10 +97,14 @@ export class App extends Component {
       <>
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ToastContainer autoClose={3000} limit={1} />
-        {isLoading && <Loader />}
+        {isLoading && (
+          <div className={css.Wrapper}>
+            <Loader />
+          </div>
+        )}
         {images.length !== 0 && <ImageGallery images={images} />}
         {isVisible && (
-          <div className={css.btnWrapper}>
+          <div className={css.Wrapper}>
             <Button onClick={this.onLoadMoreClick} disabled={isLoading}>
               {isLoading ? 'Loading...' : 'Loading more'}
             </Button>
@@ -111,45 +115,35 @@ export class App extends Component {
   }
 }
 
+//   try {
+//     const response = await axios.get(
+//       `?q=${this.statesearchQuery}&page=${this.state.page}&key=${API_KEY}`
+//     );
+//     if (response.data.totalHits === 0) {
+//       toast.error(
+//         'Sorry, there are no images mathcing your search. Please try again.',
+//         {
+//           theme: 'colored',
+//         }
+//       );
+//       this.setState({ images: [], isLoading: false });
+//       return;
+//     }
 
-
-
-
-
-
-
-
-
-
-  //   try {
-  //     const response = await axios.get(
-  //       `?q=${this.statesearchQuery}&page=${this.state.page}&key=${API_KEY}`
-  //     );
-  //     if (response.data.totalHits === 0) {
-  //       toast.error(
-  //         'Sorry, there are no images mathcing your search. Please try again.',
-  //         {
-  //           theme: 'colored',
-  //         }
-  //       );
-  //       this.setState({ images: [], isLoading: false });
-  //       return;
-  //     }
-
-  //     // if (this.state.page === 1) {
-  //     //   this.setState({images: [...response.data.hits]})
-  //     // } else {
-  //     //   this.setState(prevState => ({
-  //     //     images: [
-  //     //       ...prevState.images,
-  //     //       ...this.normalizedData(response.data.hits),
-  //     //     ],
-  //     //   }));
-  //     // }
-  //     // if (this.state.page * this.state.perPage >= response.data.totalHits) {
-  //     //   this.setState({isLoadBtnHidden: true});
-  //     // }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
+//     // if (this.state.page === 1) {
+//     //   this.setState({images: [...response.data.hits]})
+//     // } else {
+//     //   this.setState(prevState => ({
+//     //     images: [
+//     //       ...prevState.images,
+//     //       ...this.normalizedData(response.data.hits),
+//     //     ],
+//     //   }));
+//     // }
+//     // if (this.state.page * this.state.perPage >= response.data.totalHits) {
+//     //   this.setState({isLoadBtnHidden: true});
+//     // }
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }
